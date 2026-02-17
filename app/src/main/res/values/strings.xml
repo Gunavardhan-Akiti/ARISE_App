@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ARISE App</string>
-    <string name="welcome_message">Welcome to ARISE</string>
-    <string name="app_description">Android app built with Jetpack Compose</string>
+    <string name="app_name">SYSTEM</string>
+    <string name="app_subtitle">Solo Leveling Wake-Up System</string>
+    <string name="welcome_message">ARISE, HUNTER</string>
+    <string name="app_description">Your daily quest awaits. Complete 10,000 steps to unlock your device.</string>
+
+    <!-- Quest -->
+    <string name="quest_title">DAILY QUEST</string>
+    <string name="quest_active">Quest Active — Complete to Unlock</string>
+    <string name="quest_complete">QUEST COMPLETE</string>
+    <string name="quest_failed">QUEST FAILED</string>
+    <string name="step_goal_format">%1$d / %2$d steps</string>
+
+    <!-- Alarm -->
+    <string name="alarm_title">WAKE-UP ALARM</string>
+    <string name="alarm_dismiss">ACKNOWLEDGE</string>
+
+    <!-- Permissions -->
+    <string name="accessibility_service_description">Solo Leveling SYSTEM uses accessibility to enforce quest mode by detecting unauthorized app launches during an active quest.</string>
+    <string name="device_admin_description">Solo Leveling SYSTEM uses device admin for screen pinning during active quests.</string>
+    <string name="health_connect_rationale">SYSTEM needs access to Health Connect to track your steps during quests.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">SYSTEM SETTINGS</string>
+    <string name="settings_alarm_time">Alarm Time</string>
+    <string name="settings_step_goal">Step Goal</string>
+    <string name="settings_strict_mode">Strict Mode</string>
+    <string name="settings_whitelisted_apps">Whitelisted Apps</string>
+
+    <!-- Notifications -->
+    <string name="quest_channel_name">Quest Progress</string>
+    <string name="quest_channel_description">Shows real-time step progress during active quest</string>
+    <string name="notification_quest_active">Quest in progress: %1$d / %2$d steps</string>
 </resources>

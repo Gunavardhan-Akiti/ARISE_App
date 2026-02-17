@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
+    <!-- Solo Leveling System Color Palette -->
+    <color name="system_background">#FF000A19</color>
+    <color name="system_surface">#FF001428</color>
+    <color name="system_primary">#FF00C3FF</color>
+    <color name="system_primary_dark">#FF0080FF</color>
+    <color name="system_accent">#FF00E5FF</color>
+    <color name="system_glow">#3300C3FF</color>
+    <color name="system_error">#FFFF0040</color>
+    <color name="system_success">#FF00FF88</color>
+    <color name="system_warning">#FFFFAA00</color>
+    <color name="system_text_primary">#FFFFFFFF</color>
+    <color name="system_text_secondary">#99FFFFFF</color>
+    <color name="system_text_muted">#5500C3FF</color>
+    <color name="system_border">#5900C3FF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>
