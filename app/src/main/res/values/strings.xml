@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ARISE App</string>
+    <string name="welcome_message">Welcome to ARISE</string>
+    <string name="app_description">Android app built with Jetpack Compose</string>
+</resources>
