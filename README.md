@@ -1,172 +1,107 @@
-# ARISE_App
+# ARISE
 
-Android application built with Gradle, Jetpack Compose, and Kotlin.
+**Solo Leveling SYSTEM Alarm App** — A gamified wake-up alarm inspired by *Solo Leveling*. The alarm can only be dismissed by walking steps or proving you made your bed (verified by on-device AI). Starts every morning with a rotating motivational quote from the System.
 
-## Project Structure
+> *"Arise, Hunter."*
 
-This is a modern Android application using:
-- **Gradle 8.7** - Build automation tool
-- **Kotlin 1.9.22** - Programming language
-- **Jetpack Compose** - Modern UI toolkit
-- **Android Gradle Plugin 8.3.0** - Android build system
-- **Material Design 3** - UI components
+## Overview
 
-## Project Setup
-
-### Prerequisites
-- JDK 17 or higher
-- Android SDK with API Level 34
-- Android Studio (recommended) or command-line tools
-
-### Build Configuration
-
-The project uses Kotlin DSL for Gradle configuration:
-- `build.gradle.kts` - Root project configuration
-- `app/build.gradle.kts` - App module configuration
-- `settings.gradle.kts` - Project settings
-- `gradle.properties` - Gradle properties
-
-### Key Dependencies
-
-```kotlin
-// AndroidX Core
-androidx.core:core-ktx:1.12.0
-androidx.lifecycle:lifecycle-runtime-ktx:2.6.2
-androidx.activity:activity-compose:1.8.1
-
-// Jetpack Compose
-androidx.compose:compose-bom:2023.10.01
-androidx.compose.ui:ui
-androidx.compose.material3:material3
-
-// Testing
-junit:junit:4.13.2
-androidx.test.ext:junit:1.1.5
-androidx.test.espresso:espresso-core:3.5.1
-```
-
-## Building the Project
-
-### Using Gradle Wrapper (Recommended)
-
-```bash
-# Build the project
-./gradlew build
-
-# Assemble debug APK
-./gradlew assembleDebug
-
-# Install on connected device
-./gradlew installDebug
-
-# Run tests
-./gradlew test
-```
-
-### Using Android Studio
-
-1. Open Android Studio
-2. Select "Open an Existing Project"
-3. Navigate to the project directory
-4. Wait for Gradle sync to complete
-5. Click Run or use Shift+F10
-
-## Project Structure
-
-```
-ARISE_App/
-├── app/
-│   ├── src/
-│   │   └── main/
-│   │       ├── java/com/arise/app/
-│   │       │   ├── MainActivity.kt          # Main activity with Compose
-│   │       │   └── ui/theme/                # Theme configuration
-│   │       │       ├── Color.kt             # Color definitions
-│   │       │       ├── Theme.kt             # App theme
-│   │       │       └── Type.kt              # Typography
-│   │       ├── res/                         # Resources
-│   │       │   ├── values/
-│   │       │   │   ├── strings.xml          # String resources
-│   │       │   │   ├── colors.xml           # Color resources
-│   │       │   │   └── themes.xml           # Theme resources
-│   │       │   └── drawable/                # Drawable resources
-│   │       └── AndroidManifest.xml          # App manifest
-│   ├── build.gradle.kts                     # App module build config
-│   └── proguard-rules.pro                   # ProGuard rules
-├── gradle/
-│   └── wrapper/                             # Gradle wrapper files
-├── build.gradle.kts                         # Root build config
-├── settings.gradle.kts                      # Project settings
-└── gradle.properties                        # Gradle properties
-```
+| Spec | Value |
+|------|-------|
+| Platform | Android 16 (API 36) |
+| Language | Kotlin 2.2.20 |
+| UI | Jetpack Compose (BOM 2025.12.00) with Material 3 |
+| Architecture | Single-screen, MVVM, Hilt DI |
+| AI | Gemini Nano on-device (ML Kit GenAI Prompt API) |
+| Min SDK | 36 |
+| Build System | Gradle 8.13, AGP 8.8.0, KSP |
 
 ## Features
 
-### MainActivity
-The main entry point of the application featuring:
-- Jetpack Compose UI
-- Material Design 3 theming
-- Dark/Light theme support
-- Dynamic color support (Android 12+)
+| Feature | Description |
+|---------|-------------|
+| **Alarm** | Daily alarm with configurable time, sound, volume, and vibration. Weekday selection (run on specific days). Doze-exempt via `AlarmManager.setAlarmClock()`. Persists across reboots. |
+| **Dismiss by Steps** | Alarm can only be silenced after walking a configurable number of steps (uses `TYPE_STEP_COUNTER` sensor). |
+| **Dismiss by Bed Photo** | Take a photo of your bed; Gemini Nano (on-device) analyzes the image and determines if the bed is made. If not, you must retry. No cloud calls, no API key. |
+| **Daily Motivation** | Rotating Solo Leveling themed quotes that change every day. "[ SYSTEM MESSAGE ]" displayed prominently on the main screen. |
+| **Solo Leveling Theme** | Dark immersive UI with cyan-blue glow panels, particle background, glitch text effects, and pulsing animations. |
 
-### Compose UI
-- Modern declarative UI
-- Preview support for rapid development
-- Material 3 components
-- Responsive layouts
+## Single-Screen Layout
 
-## Development
+The entire app is a single scrollable screen:
 
-### Adding Dependencies
+1. **Permission banners** (if needed)
+2. **Daily motivational quote** (changes each day, Solo Leveling themed)
+3. **Current time and date**
+4. **WAKE-UP ALARM** — time picker, on/off toggle, weekday chips (S M T W T F S)
+5. **ALARM SOUND** — sound picker, volume slider, vibrate toggle
+6. **ALARM DISMISS** — dismiss by walking (step count), dismiss by bed photo (AI)
 
-Add dependencies in `app/build.gradle.kts`:
+## Tech Stack
 
-```kotlin
-dependencies {
-    implementation("androidx.your-library:version")
-}
+- **Jetpack Compose BOM 2025.12.00** — UI framework
+- **Material 3** — Theming and components
+- **ML Kit GenAI Prompt API** (`genai-prompt:1.0.0-beta1`) — On-device Gemini Nano for bed classification
+- **Health Connect** (`connect-client:1.1.0-alpha12`) — Step sync from Samsung Health / Google Fit (Phase 2)
+- **Room 2.7.0** — Local database (KSP)
+- **Hilt 2.56.2** — Dependency injection (KSP)
+- **DataStore 1.1.4** — Preferences storage
+- **Coroutines 1.10.1** — Async operations and Flows
+
+## Alarm Dismiss Flow
+
+```
+Alarm fires
+  → AlarmRingingActivity shown (full-screen, over lock screen)
+  → Sound plays, vibration starts
+  → User must satisfy at least one enabled condition:
+      • Walk N steps (configurable, uses hardware step counter)
+      • Take photo of made bed (Gemini Nano on-device classification)
+  → Once satisfied, slide-up gesture dismisses alarm
+  → Next alarm auto-scheduled for the next enabled weekday
 ```
 
-### Creating Composables
+## Permissions
 
-Create reusable UI components:
+| Permission | Purpose |
+|-----------|---------|
+| `SCHEDULE_EXACT_ALARM` | Doze-exempt alarm scheduling |
+| `RECEIVE_BOOT_COMPLETED` | Re-register alarm after reboot |
+| `USE_FULL_SCREEN_INTENT` | Alarm UI over lock screen |
+| `WAKE_LOCK` | Keep screen on during alarm |
+| `VIBRATE` | Alarm vibration |
+| `FOREGROUND_SERVICE` | Background services |
+| `FOREGROUND_SERVICE_HEALTH` | Step tracking service type |
+| `FOREGROUND_SERVICE_SPECIAL_USE` | Alarm ringing service type |
+| `POST_NOTIFICATIONS` | Alarm and progress notifications |
+| `ACTIVITY_RECOGNITION` | Hardware step counter sensor |
+| `health.READ_STEPS` | Health Connect step data (Phase 2) |
+| `CAMERA` | Capture bed photo for AI classification |
 
-```kotlin
-@Composable
-fun MyComponent() {
-    Text(text = "Hello, Compose!")
-}
-```
+## Building
 
-### Themes and Styling
+### Prerequisites
+- JDK 21+
+- Android SDK with API Level 36 (Android 16)
+- Android Studio Ladybug or newer
 
-Customize the theme in `ui/theme/Theme.kt`:
-- Colors: Modify color schemes in `Color.kt`
-- Typography: Update text styles in `Type.kt`
+### Commands
 
-## Testing
-
-The project includes:
-- Unit tests with JUnit
-- Instrumented tests with Espresso
-- Compose UI tests
-
-Run tests:
 ```bash
-./gradlew test                 # Unit tests
-./gradlew connectedAndroidTest # Instrumented tests
+./gradlew assembleDebug    # Build debug APK
+./gradlew installDebug     # Install on connected device
 ```
+
+## Device Requirements
+
+- **Gemini Nano (bed classification):** Requires a device with AICore support (Pixel 8+, Galaxy S24+, select Xiaomi/vivo). On unsupported devices, bed dismiss fails safe to false and the user can rely on step dismiss instead.
+- **Step counter:** Requires hardware `TYPE_STEP_COUNTER` sensor. Falls back to immediate dismiss if sensor is unavailable.
+
+## Roadmap
+
+- **Phase 2:** Daily quest task board with custom tasks, step tracking via Health Connect (Samsung Health sync), carryover system, and goal review notifications. Code is written and stubbed — ready to enable.
+- **Phase 3:** Home screen widget, hunter stats, streaks, and ranks.
 
 ## License
 
-See [LICENSE](LICENSE) file for details.
-
-## Requirements
-
-- Minimum SDK: 24 (Android 7.0)
-- Target SDK: 34 (Android 14)
-- Compile SDK: 34
-
-## Note
-
-On first build, Gradle will download required dependencies from Maven Central and Google's Maven repository. Ensure you have internet connectivity for the initial setup.
+See [LICENSE](LICENSE) for details.

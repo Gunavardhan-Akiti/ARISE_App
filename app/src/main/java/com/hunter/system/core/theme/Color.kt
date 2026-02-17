@@ -42,3 +42,8 @@ val RankC = Color(0xFF00AAFF)
 val RankB = Color(0xFF8800FF)
 val RankA = Color(0xFFFF6600)
 val RankS = Color(0xFFFFD700)
+
+// ─── Convenience Aliases ───
+val SystemBlue = SystemPrimary
+val SystemCyan = SystemAccent
+val SystemBlack = SystemBackground

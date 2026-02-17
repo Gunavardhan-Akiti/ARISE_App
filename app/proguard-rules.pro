@@ -37,9 +37,3 @@
 
 # ─── DataStore ───
 -keep class androidx.datastore.** { *; }
-
-# ─── Accessibility & Device Admin ───
--keep class com.hunter.system.features.lock.LockAccessibilityService { *; }
--keep class com.hunter.system.features.lock.DeviceAdminReceiver { *; }
--keep class com.hunter.system.features.notifications.NotificationGuardService { *; }
-

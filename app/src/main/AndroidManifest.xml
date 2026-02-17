@@ -2,12 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- ─── Permissions (Android 16 / API 36) ─── -->
-
-    <!-- Health Connect: Read step data -->
-    <uses-permission android:name="android.permission.health.READ_STEPS" />
-    <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
-
     <!-- Alarm: Exact scheduling & boot persistence -->
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -15,18 +9,28 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
-    <!-- Foreground Service: Keep alarm & tracking alive -->
+    <!-- Foreground Service: Keep alarm & step tracking alive -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
 
-    <!-- Lock/Kiosk Mode -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS"
-        tools:ignore="ProtectedPermissions" />
-
     <!-- Notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- Step counter sensor (TYPE_STEP_COUNTER) -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- Health Connect: Read step data from Samsung Health / Google Fit -->
+    <uses-permission android:name="android.permission.health.READ_STEPS" />
+
+    <!-- Camera: Bed photo for dismiss -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
+    <!-- Required for Health Connect visibility on Android 11+ -->
+    <queries>
+        <package android:name="com.google.android.apps.healthdata" />
+    </queries>
 
     <application
         android:name=".app.SystemApplication"
@@ -38,7 +42,6 @@
         android:theme="@style/Theme.SoloLevelingSystem"
         tools:targetApi="36">
 
-        <!-- ─── Main Activity ─── -->
         <activity
             android:name=".features.MainActivity"
             android:exported="true"
@@ -49,67 +52,15 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
+            </intent-filter>
         </activity>
 
-        <!-- ─── Alarm Receiver ─── -->
-        <receiver
-            android:name=".features.alarm.AlarmReceiver"
-            android:exported="false" />
-
-        <!-- Boot Receiver: Re-register alarms after reboot -->
-        <receiver
-            android:name=".features.alarm.BootReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- ─── Foreground Service: Alarm & Quest tracking ─── -->
-        <service
-            android:name=".core.services.QuestForegroundService"
-            android:exported="false"
-            android:foregroundServiceType="health|specialUse" />
-
-        <!-- ─── Notification Listener Service ─── -->
-        <service
-            android:name=".features.notifications.NotificationGuardService"
-            android:exported="true"
-            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
-            <intent-filter>
-                <action android:name="android.service.notification.NotificationListenerService" />
-            </intent-filter>
-        </service>
-
-        <!-- ─── Accessibility Service (Lock Controller) ─── -->
-        <service
-            android:name=".features.lock.LockAccessibilityService"
-            android:exported="true"
-            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
-            <intent-filter>
-                <action android:name="android.accessibilityservice.AccessibilityService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
-        </service>
-
-        <!-- ─── Device Admin Receiver ─── -->
-        <receiver
-            android:name=".features.lock.DeviceAdminReceiver"
-            android:exported="true"
-            android:permission="android.permission.BIND_DEVICE_ADMIN">
-            <meta-data
-                android:name="android.app.device_admin"
-                android:resource="@xml/device_admin_policies" />
-            <intent-filter>
-                <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Health Connect permission intent filter -->
+        <!-- Health Connect: permission rationale activity (required on Android 14+) -->
         <activity-alias
-            android:name="ViewPermissionUsageActivity"
+            android:name="ViewHealthPermissionRationale"
             android:exported="true"
             android:targetActivity=".features.MainActivity"
             android:permission="android.permission.START_VIEW_PERMISSION_USAGE">
@@ -118,6 +69,50 @@
                 <category android:name="android.intent.category.HEALTH_PERMISSIONS" />
             </intent-filter>
         </activity-alias>
+
+        <receiver
+            android:name=".features.alarm.AlarmReceiver"
+            android:exported="false" />
+
+        <activity
+            android:name=".features.alarm.AlarmRingingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SoloLevelingSystem"
+            android:showOnLockScreen="true"
+            android:turnScreenOn="true"
+            android:excludeFromRecents="true" />
+
+        <receiver
+            android:name=".features.alarm.BootReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".features.alarm.GoalReviewReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".core.services.QuestForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="health|specialUse" />
+
+        <service
+            android:name=".features.alarm.AlarmRingingService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

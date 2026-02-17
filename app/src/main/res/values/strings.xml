@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">SYSTEM</string>
+    <string name="app_name">ARISE</string>
     <string name="app_subtitle">Solo Leveling Wake-Up System</string>
     <string name="welcome_message">ARISE, HUNTER</string>
     <string name="app_description">Your daily quest awaits. Complete 10,000 steps to unlock your device.</string>

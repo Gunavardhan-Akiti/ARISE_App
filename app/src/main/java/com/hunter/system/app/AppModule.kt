@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.hunter.system.core.database.QuestDao
 import com.hunter.system.core.database.SystemDatabase
+import com.hunter.system.core.database.TaskDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -34,5 +35,11 @@ object AppModule {
     @Singleton
     fun provideQuestDao(database: SystemDatabase): QuestDao {
         return database.questDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideTaskDao(database: SystemDatabase): TaskDao {
+        return database.taskDao()
     }
 }
