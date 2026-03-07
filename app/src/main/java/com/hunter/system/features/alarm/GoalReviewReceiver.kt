@@ -35,7 +35,7 @@ class GoalReviewReceiver : BroadcastReceiver() {
       try {
         val db = androidx.room.Room.databaseBuilder(
             context, SystemDatabase::class.java, SystemDatabase.DATABASE_NAME
-        ).fallbackToDestructiveMigration().build()
+        ).fallbackToDestructiveMigration(dropAllTables = true).build()
 
         val pending = db.taskDao().getPendingTasksForDate(LocalDate.now())
         if (pending.isNotEmpty()) {

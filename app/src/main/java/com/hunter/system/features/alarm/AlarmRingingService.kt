@@ -222,7 +222,7 @@ class AlarmRingingService : Service() {
     val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
     wakeLock =
             pm.newWakeLock(
-                            PowerManager.PARTIAL_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                            PowerManager.PARTIAL_WAKE_LOCK,
                             "ARISE:AlarmRinging"
                     )
                     .apply {

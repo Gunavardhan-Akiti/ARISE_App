@@ -27,7 +27,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.History
-import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Sync
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.*
@@ -152,7 +152,7 @@ fun QuestScreen(viewModel: QuestViewModel = hiltViewModel()) {
                   disabledContainerColor = SystemBlue.copy(alpha = 0.2f),
               ),
               shape = RoundedCornerShape(12.dp), modifier = Modifier.size(48.dp),
-          ) { Icon(Icons.Default.Send, contentDescription = "Submit", modifier = Modifier.size(18.dp)) }
+          ) { Icon(Icons.AutoMirrored.Filled.Send, contentDescription = "Submit", modifier = Modifier.size(18.dp)) }
         }
       }
 
@@ -406,7 +406,7 @@ private fun TaskCardContent(
 
           if (isStepTask && isPending) {
             Spacer(Modifier.height(6.dp))
-            val progress = (task.stepsCompleted.toFloat() / (task.stepGoal ?: 1)).coerceIn(0f, 1f)
+            val progress = (task.stepsCompleted.toFloat() / task.stepGoal).coerceIn(0f, 1f)
             Row(verticalAlignment = Alignment.CenterVertically) {
               LinearProgressIndicator(progress = { progress },
                   modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(3.dp)),

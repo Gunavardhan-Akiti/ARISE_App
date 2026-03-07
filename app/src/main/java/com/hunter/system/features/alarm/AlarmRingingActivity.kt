@@ -49,7 +49,7 @@ import androidx.compose.material.icons.filled.Bed
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.Button
@@ -266,12 +266,12 @@ class AlarmRingingActivity : ComponentActivity(), SensorEventListener {
   private fun dismissAlarm() {
     KioskManager.onAlarmDismissed()
     AlarmRingingService.stop(this)
-    QuestForegroundService.start(this)
+    // QuestForegroundService.start(this) — stubbed for Phase 2
 
     val intent = Intent(this, MainActivity::class.java).apply {
       flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-              putExtra(MainActivity.EXTRA_FROM_ALARM, true)
-            }
+      putExtra(MainActivity.EXTRA_FROM_ALARM, true)
+    }
     startActivity(intent)
     finish()
   }
@@ -397,7 +397,7 @@ private fun StepTrackerBlock(stepsTaken: Int, stepsRequired: Int, stepProgress: 
     Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
               Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
-                imageVector = Icons.Default.DirectionsWalk, contentDescription = null,
+                imageVector = Icons.AutoMirrored.Filled.DirectionsWalk, contentDescription = null,
                 tint = if (stepsDone) Color(0xFF00FF88) else Color(0xFFFF4444),
                         modifier = Modifier.size(28.dp)
                 )

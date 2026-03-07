@@ -25,9 +25,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bed
-import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -344,7 +344,7 @@ private fun AlarmSoundSection(
       }
       Spacer(Modifier.height(20.dp))
       Row(verticalAlignment = Alignment.CenterVertically) {
-        Icon(Icons.Default.VolumeUp, null, tint = SystemBlue, modifier = Modifier.size(20.dp))
+        Icon(Icons.AutoMirrored.Filled.VolumeUp, null, tint = SystemBlue, modifier = Modifier.size(20.dp))
         Spacer(Modifier.width(12.dp))
         Text("Volume", color = Color.White, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
         Spacer(Modifier.width(8.dp))
@@ -381,7 +381,7 @@ private fun AlarmDismissSection(
       Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.SpaceBetween) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
-          Icon(Icons.Default.DirectionsWalk, null, tint = SystemBlue, modifier = Modifier.size(20.dp))
+          Icon(Icons.AutoMirrored.Filled.DirectionsWalk, null, tint = SystemBlue, modifier = Modifier.size(20.dp))
           Spacer(Modifier.width(12.dp))
           Column {
             Text("Dismiss by Walking", color = Color.White, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)

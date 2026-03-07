@@ -13,9 +13,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bed
-import androidx.compose.material.icons.filled.DirectionsWalk
+import androidx.compose.material.icons.automirrored.filled.DirectionsWalk
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.MusicNote
-import androidx.compose.material.icons.filled.VolumeUp
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -173,7 +173,7 @@ private fun AlarmDismissSection(
       ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.weight(1f)) {
           Icon(
-                  Icons.Default.DirectionsWalk,
+                  Icons.AutoMirrored.Filled.DirectionsWalk,
                   contentDescription = null,
                   tint = SystemBlue,
                   modifier = Modifier.size(20.dp)
@@ -408,7 +408,7 @@ private fun AlarmSoundSection(
       // Volume slider
       Row(verticalAlignment = Alignment.CenterVertically) {
         Icon(
-                Icons.Default.VolumeUp,
+                Icons.AutoMirrored.Filled.VolumeUp,
                 contentDescription = null,
                 tint = SystemBlue,
                 modifier = Modifier.size(20.dp)
